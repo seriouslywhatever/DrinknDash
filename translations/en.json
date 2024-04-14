@@ -1,0 +1,63 @@
+{
+    "iEmail": "Email: ",
+    "ipEmail": "Enter Email...",
+    "loginText": "Login",
+    "iUsername": "Username:",
+    "ipUsername": "Enter Username...",
+    "iPassword": "Password:",
+    "ipPassword": "Enter Password...",
+    "forgotPasswordText": "forgot your password?",
+    "noAccountText": "No account?",
+    "signUpText": "Sign Up",
+
+    "registerText":"Register",
+    "registerWarningEmail": "Please provide proper email",
+    "registerWarningUsername": "Please provide a username",
+    
+    "logoutText" : "Logout",
+    "createLobbyText": "Create Lobby",
+    "lobbiesText": "Lobbies",
+    "playersText": "Players",
+
+    "pickHorseText": "Pick your horse",
+    "inviteText": "Invite",
+    "inviteMessage": "Come play a round of DrinknDash with me!",
+    "startText": "Start",
+
+    "getAccountBackText": "Getting back into your account",
+    "recoverEmailLabel": "Recovery Email:",
+    "recoverAccountText": "Recover Account",
+
+    "dialogButtonCancel": "Cancel",
+    "dialogButtonConfirm": "Confirm",
+
+    "changePasswordText": "Change Password",
+    "changePasswordWarning":"Are you sure you want to change your password?",
+
+    "passwordCorrect": "Password has been updated",
+    "passwordIncorrect":"Incorrect password provided",
+    "passwordMatchError": "Passwords do not match.",
+    "currentPasswordLabel":"Current Password:",
+    "ipCurrentPassword": "Enter current password...",
+    "newPasswordLabel": "New Password:",
+    "ipNewPassword":"Enter new password...",
+    "rePasswordLabel": "Re-enter Password:",
+    "ipRePassword": "Re-enter new password...",
+    
+    "sipsSelectionText": "Select number of sips",
+
+    "winnerText": "Winner",
+    "loserSelectMessage": "Select user to send sips",
+    "totalSipsText":"Total Sips:",
+    "showMercyText": "Show Mercy",
+    
+    "settingsText": "Settings",
+    "darkModeText": "Dark Mode",
+    "pushNotificationText": "Push notifications",
+    "languagesText": "Languages",
+    "deleteAccountText": "Delete Account",
+    "deleteAccountWarning" : "Are you sure you want to delete your account?",
+
+    "dutchLabel":"Dutch",
+    "englishLabel": "English"
+}
