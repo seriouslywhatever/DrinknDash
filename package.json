@@ -19,7 +19,6 @@
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-localize": "^3.1.0",
     "react-native-password-strength-meter-bar": "^1.2.0",
-    "react-native-preference": "^2.2.3",
     "react-native-reanimated": "~3.3.0",
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",

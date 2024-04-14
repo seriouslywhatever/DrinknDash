@@ -32,7 +32,6 @@ export const ThemeProvider = ({ children }) => {
 
     //Method to change the theme of the application.
     const changeTheme = (value) => {
-        console.log(value);
         setTheme(value ? lightTheme : darkTheme);
     };
 
