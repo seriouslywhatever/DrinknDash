@@ -1,42 +1,48 @@
 import { useState, useEffect } from "react";
-import { Image, Switch, Text, View, TouchableOpacity, Alert, ImageBackground, StyleSheet } from "react-native";
+import { Image, Switch, Text, View, TouchableOpacity, Alert, ImageBackground, StyleSheet, ToastAndroid } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useWebSocket } from '../WebsocketContext';
 import { useTheme } from '../ThemeContext';
 import { useI18n } from "../I18nContext";
-import I18n from 'react-native-i18n';
+import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default Settings = ({ navigation }) => {
 
     const { theme, changeTheme } = useTheme(); //Provider of style values based on application theme.
-
+    const { t } = useTranslation();
     /**
      * Values to change preferences
      */
 
     const [isDarkMode, setDarkMode] = useState();
+
     const toggleSwitch = async () => {
         setDarkMode(!isDarkMode);
         changeTheme(isDarkMode); //Changes the application theme.
         await AsyncStorage.setItem('theme', JSON.stringify(isDarkMode));
+        if (!isDarkMode) {
+            ToastAndroid.show('Darkmode turned on', ToastAndroid.SHORT);
+        } else {
+            ToastAndroid.show('Darkmode turned off', ToastAndroid.SHORT);
+        }
+
     };
 
     const [isPushEnabled, setPush] = useState(false);
     const togglePushSwitch = () => setPush(!isPushEnabled);
 
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState();
+    const [value, setValue] = useState(false);
     const [items, setItems] = useState([
-        { label: I18n.t('englishLabel'), value: 'en' },
-        { label: I18n.t('dutchLabel'), value: 'nl' }
+        { label: t('englishLabel'), value: 'en' },
+        { label: t('dutchLabel'), value: 'nl' }
     ]);
 
     const { socket } = useWebSocket();
     const { changeLanguage } = useI18n(); //changes language of application.
 
     useEffect(() => {
-
         //retrieve stored variables to set initial value of preferences
         const checkForPreference = async () => {
             const language = await AsyncStorage.getItem('locale');
@@ -48,9 +54,10 @@ export default Settings = ({ navigation }) => {
                 setValue('en');
             }
             if (savedTheme) {
-                setDarkMode(!JSON.parse(savedTheme));
+                setDarkMode(JSON.parse(savedTheme));
             } else {
-                setDarkMode(true);
+                setDarkMode(false);
+                await AsyncStorage.setItem('theme', 'false');
             }
         }
 
@@ -84,11 +91,11 @@ export default Settings = ({ navigation }) => {
         <View style={{ flex: 1 }}>
             <ImageBackground source={theme.backgroundImage} style={{ height: '100%' }}>
                 <View style={styles.mainContainer}>
-                    <Text style={[styles.settingsText, { color: theme.color }]}>{I18n.t('settingsText')}</Text>
+                    <Text style={[styles.settingsText, { color: theme.color }]}>{t('settingsText')}</Text>
                     <View style={styles.preferenceList}>
                         <View style={styles.preferenceContainer}>
                             <View style={styles.preferenceTextContainer}>
-                                <Text style={{ fontSize: 20, color: theme.color }}>{I18n.t('darkModeText')}</Text>
+                                <Text style={{ fontSize: 20, color: theme.color }}>{t('darkModeText')}</Text>
                             </View>
                             <View style={{ flex: 1 }}>
                                 <Switch
@@ -101,7 +108,7 @@ export default Settings = ({ navigation }) => {
                         </View>
                         <View style={styles.preferenceContainer}>
                             <View style={styles.preferenceTextContainer}>
-                                <Text style={{ fontSize: 20, color: theme.color }}>{I18n.t('pushNotificationText')}</Text>
+                                <Text style={{ fontSize: 20, color: theme.color }}>{t('pushNotificationText')}</Text>
                             </View>
                             <View style={{ flex: 1 }}>
                                 <Switch
@@ -114,7 +121,7 @@ export default Settings = ({ navigation }) => {
                         </View>
                         <TouchableOpacity onPress={() => navigation.navigate("PasswordChange")} style={[styles.preferenceContainer, { padding: '5%' }]}>
                             <View style={[styles.preferenceTextContainer, { flex: 3 }]}>
-                                <Text style={{ fontSize: 20, color: theme.color }}>{I18n.t('changePasswordText')}</Text>
+                                <Text style={{ fontSize: 20, color: theme.color }}>{t('changePasswordText')}</Text>
                             </View>
                             <View style={styles.arrowContainer}>
                                 <Image source={require('../assets/arrow.jpg')} style={styles.arrowImage} resizeMode="contain" />
@@ -122,7 +129,7 @@ export default Settings = ({ navigation }) => {
                         </TouchableOpacity>
                         <View style={styles.preferenceContainer}>
                             <View style={[styles.preferenceTextContainer, { flex: 3 }]}>
-                                <Text style={{ fontSize: 20, color: theme.color }}>{I18n.t('languagesText')}</Text>
+                                <Text style={{ fontSize: 20, color: theme.color }}>{t('languagesText')}</Text>
                             </View>
                             <View style={{ flex: 2 }}>
                                 <DropDownPicker
@@ -143,15 +150,15 @@ export default Settings = ({ navigation }) => {
                     </View>
                     <View>
                         <TouchableOpacity onPress={() => {
-                            Alert.alert(I18n.t('deleteAccountText'), I18n.t('deleteAccountWarning'), [
+                            Alert.alert(t('deleteAccountText'), t('deleteAccountWarning'), [
                                 {
-                                    text: I18n.t('dialogButtonCancel'),
+                                    text: t('dialogButtonCancel'),
                                     style: 'cancel',
                                 },
-                                { text: I18n.t('dialogButtonConfirm'), onPress: () => socket.send("DELETE") },
+                                { text: t('dialogButtonConfirm'), onPress: () => socket.send("DELETE") },
                             ]);
                         }} style={styles.button}>
-                            <Text style={styles.buttonText}>{I18n.t('deleteAccountText')}</Text>
+                            <Text style={styles.buttonText}>{t('deleteAccountText')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

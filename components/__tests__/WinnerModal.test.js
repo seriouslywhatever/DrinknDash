@@ -12,10 +12,6 @@ jest.mock('../../WebsocketContext', () => ({
     useWebSocket: () => ({ socket: { send: jest.fn() } })
 }));
 
-jest.mock('react-native-i18n', () => ({
-    t: jest.fn((key) => key)
-}));
-
 describe('WinnerModal', () => {
     it('renders correctly', () => {
         const losers = [

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View, Text, ImageBackground, TextInput, TouchableOpacity, KeyboardAvoidingView, ToastAndroid } from 'react-native';
 import { useWebSocket } from '../WebsocketContext';
 import { useI18n } from '../I18nContext';
-import I18n from 'react-native-i18n';
+import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../ThemeContext';
@@ -13,15 +13,20 @@ export default Login = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const { socket } = useWebSocket();
     const { changeLanguage } = useI18n();
-    const { theme } = useTheme(); //Provider of style values based on application theme.
+    const { theme, changeTheme } = useTheme(); //Provider of style values based on application theme.
+    const { t } = useTranslation();
 
     //Retrieve the language preference to on launch
     useFocusEffect(
         useCallback(() => {
             const checkForPreference = async () => {
                 const language = await AsyncStorage.getItem('locale');
+                const savedTheme = await AsyncStorage.getItem('theme');
                 if (language) {
                     changeLanguage(language);
+                }
+                if (theme) {
+                    changeTheme(JSON.parse(savedTheme));
                 }
             }
             checkForPreference();
@@ -74,33 +79,33 @@ export default Login = ({ navigation }) => {
             <View style={styles.main}>
                 <ImageBackground source={theme.backgroundImage} style={{ height: '100%' }}>
                     <View style={styles.container}>
-                        <Text style={[styles.loginText, { color: theme.color }]}>{I18n.t('loginText')}</Text>
+                        <Text style={[styles.loginText, { color: theme.color }]}>{t('loginText')}</Text>
                         <View style={{ marginVertical: '15%' }}>
-                            <Text style={{ color: theme.color }}>{I18n.t('iUsername')}</Text>
+                            <Text style={{ color: theme.color }}>{t('iUsername')}</Text>
                             <TextInput
                                 style={styles.input}
                                 onChangeText={setUsername}
                                 value={username}
-                                placeholder={I18n.t('ipUsername')} />
+                                placeholder={t('ipUsername')} />
                         </View>
                         <View>
-                            <Text style={{ color: theme.color }}>{I18n.t('iPassword')}</Text>
+                            <Text style={{ color: theme.color }}>{t('iPassword')}</Text>
                             <TextInput
                                 style={styles.input}
                                 onChangeText={setPassword}
                                 value={password}
-                                placeholder={I18n.t('ipPassword')}
+                                placeholder={t('ipPassword')}
                                 secureTextEntry={true}
                             />
                         </View>
                         <View style={styles.textContainer}>
                             <TouchableOpacity onPress={() => navigation.navigate("PasswordRecover")}>
-                                <Text style={[styles.passwordRecoverText, { color: theme.color }]}>{I18n.t('forgotPasswordText')}</Text>
+                                <Text style={[styles.passwordRecoverText, { color: theme.color }]}>{t('forgotPasswordText')}</Text>
                             </TouchableOpacity>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ marginEnd: '1%', color: theme.color }}>{I18n.t('noAccountText')}</Text>
+                                <Text style={{ marginEnd: '1%', color: theme.color }}>{t('noAccountText')}</Text>
                                 <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                                    <Text style={{ fontWeight: 'bold', color: theme.color }}>{I18n.t('signUpText')}</Text>
+                                    <Text style={{ fontWeight: 'bold', color: theme.color }}>{t('signUpText')}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -117,7 +122,7 @@ export default Login = ({ navigation }) => {
                                 socket.send("LOGIN " + JSON.stringify(user));
                             }
 
-                        }}><Text style={[styles.buttonText, { color: theme.color }]}>{I18n.t('loginText')}</Text>
+                        }}><Text style={[styles.buttonText, { color: theme.color }]}>{t('loginText')}</Text>
                         </TouchableOpacity>
                     </View>
                 </ImageBackground >

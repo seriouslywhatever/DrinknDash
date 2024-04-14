@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, Modal, Alert, ScrollView } from 'react-native';
 import ScrollPicker from "react-native-wheel-scrollview-picker";
 import { useWebSocket } from '../WebsocketContext';
-import I18n from 'react-native-i18n';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../ThemeContext';
 
 /**
@@ -16,6 +16,7 @@ export default HorsePicker = ({ onWagerValues }) => {
 
     const { socket } = useWebSocket();
     const { theme } = useTheme(); //Provider of style values based on application theme.
+    const { t } = useTranslation();
 
     //send values to be used in Lobby screen
     const handleWager = () => {
@@ -66,7 +67,7 @@ export default HorsePicker = ({ onWagerValues }) => {
                 }}>
                 <ScrollView style={[styles.modalContainer, { backgroundColor: theme.backgroundColor }]}>
                     <View style={styles.sipsSelectorContainer}>
-                        <Text style={{ fontSize: 24, color: theme.color }} testID="sipsSelectionID">{I18n.t('sipsSelectionText')}</Text>
+                        <Text style={{ fontSize: 24, color: theme.color }} testID="sipsSelectionID">{t('sipsSelectionText')}</Text>
                         <View style={{ width: '80%' }}>
                             <ScrollPicker
                                 dataSource={[1, 2, 3, 4, 5, 6]}
@@ -82,7 +83,7 @@ export default HorsePicker = ({ onWagerValues }) => {
                                     setSips(0);
                                     setShowModel(false);
                                 }}>
-                                <Text style={{ color: theme.color }}>{I18n.t('dialogButtonCancel')}</Text>
+                                <Text style={{ color: theme.color }}>{t('dialogButtonCancel')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 testID="confirm-button"
@@ -92,7 +93,7 @@ export default HorsePicker = ({ onWagerValues }) => {
                                     socket.send("BET " + suit + " " + sips);
                                     setShowModel(false);
                                 }}>
-                                <Text style={{ color: theme.color }}>{I18n.t('dialogButtonConfirm')}</Text>
+                                <Text style={{ color: theme.color }}>{t('dialogButtonConfirm')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

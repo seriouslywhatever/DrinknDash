@@ -4,7 +4,7 @@ import HorsePicker from '../components/HorsePicker';
 import ChatBox from '../components/ChatBox';
 import { useWebSocket } from '../WebsocketContext';
 import WinnerModal from '../components/WinnerModal';
-import I18n from 'react-native-i18n';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../ThemeContext';
 
 //Images of card suits.
@@ -22,6 +22,7 @@ export default Lobby = ({ navigation, route }) => {
 
     const { socket } = useWebSocket();
     const { theme } = useTheme(); //Provider of style values based on application theme.
+    const { t } = useTranslation();
 
     const [list, setList] = useState();
     const [isHost, setIsHost] = useState(false);
@@ -130,16 +131,16 @@ export default Lobby = ({ navigation, route }) => {
                     onPress={async () => {
                         try {
                             await Share.share({
-                                message: I18n.t('inviteMessage')
+                                message: t('inviteMessage')
                             });
                         } catch (error) {
                             console.log(error);
                         }
                     }}>
-                    <Text style={{ color: theme.color }}>{I18n.t('inviteText')}</Text>
+                    <Text style={{ color: theme.color }}>{t('inviteText')}</Text>
                 </TouchableOpacity>
                 <View style={{ flex: 2, alignItems: 'center' }}>
-                    <Text style={{ color: theme.color }}>{I18n.t('pickHorseText')}</Text>
+                    <Text style={{ color: theme.color }}>{t('pickHorseText')}</Text>
                     <HorsePicker onWagerValues={handleWagerValues} />
                 </View>
                 <View style={[styles.playerList, { backgroundColor: theme.backgroundColor }]}>
@@ -160,7 +161,7 @@ export default Lobby = ({ navigation, route }) => {
                                 onPress={() => {
                                     socket.send("GAME");
                                 }}>
-                                <Text style={[styles.buttonText, { color: theme.color }]}>{I18n.t('startText')}</Text>
+                                <Text style={[styles.buttonText, { color: theme.color }]}>{t('startText')}</Text>
                             </TouchableOpacity>
                         ) : (<View />)
                     }

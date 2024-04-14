@@ -1,22 +1,23 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, ImageBackground, TextInput, TouchableOpacity, KeyboardAvoidingView, ToastAndroid, Alert } from 'react-native';
 import { useWebSocket } from '../WebsocketContext';
-import I18n from 'react-native-i18n';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../ThemeContext';
 
 export default PasswordRecover = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const { socket } = useWebSocket();
     const { theme } = useTheme(); //Provider of style values based on application theme.
+    const { t } = useTranslation();
 
     useEffect(() => {
         //Display toasts to inform user
         if (socket) {
             socket.onmessage = (event) => {
                 if (event.data == "CORRECT") {
-                    ToastAndroid.show('Password has been updated', ToastAndroid.LONG);
+                    ToastAndroid.show(t('passwordCorrect'), ToastAndroid.LONG);
                 } else if (event.data == "INCORRECT") {
-                    ToastAndroid.show('Incorrect password provided', ToastAndroid.LONG);
+                    ToastAndroid.show(t('passwordIncorrect'), ToastAndroid.LONG);
                 }
             }
         }
@@ -27,29 +28,29 @@ export default PasswordRecover = ({ navigation }) => {
             <ImageBackground source={theme.backgroundImage} style={{ height: '100%' }}>
                 <View style={styles.container}>
                     <View>
-                        <Text style={[styles.headerText, { color: theme.color }]}>{I18n.t('getAccountBackText')}</Text>
+                        <Text style={[styles.headerText, { color: theme.color }]}>{t('getAccountBackText')}</Text>
                     </View>
-                    <Text style={{ color: theme.color }}>{I18n.t('recoverEmailLabel')}</Text>
+                    <Text style={{ color: theme.color }}>{t('recoverEmailLabel')}</Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={setEmail}
                         keyboardType='email-address'
                         value={email}
-                        placeholder={I18n.t('ipEmail')}
+                        placeholder={t('ipEmail')}
                     />
                 </View>
                 <View style={[styles.button, { backgroundColor: theme.backgroundColor }]}>
                     <TouchableOpacity
                         onPress={() => {
-                            Alert.alert(I18n.t('changePasswordText'), I18n.t('changePasswordWarning'), [
+                            Alert.alert(t('changePasswordText'), t('changePasswordWarning'), [
                                 {
-                                    text: I18n.t('dialogButtonCancel'),
+                                    text: t('dialogButtonCancel'),
                                     style: 'cancel',
                                 },
-                                { text: I18n.t('dialogButtonConfirm'), onPress: () => socket.send(`RESETPASS ${email}`) },
+                                { text: t('dialogButtonConfirm'), onPress: () => socket.send(`RESETPASS ${email}`) },
                             ]);
                         }}>
-                        <Text style={[styles.buttonText, { color: theme.color }]}>{I18n.t('recoverAccountText')}</Text>
+                        <Text style={[styles.buttonText, { color: theme.color }]}>{t('recoverAccountText')}</Text>
                     </TouchableOpacity>
                 </View>
             </ImageBackground>

@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { View, Text, FlatList, Modal, TouchableOpacity, ImageBackground, StyleSheet } from 'react-native';
 import { useWebSocket } from '../WebsocketContext';
 import { useTheme } from '../ThemeContext';
-import I18n from 'react-native-i18n';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Modal to send sips to users after the game ends.
@@ -15,6 +15,7 @@ export default WinnerModal = ({ losers, show, bet }) => {
 
     const { socket } = useWebSocket();
     const { theme } = useTheme(); //Provider of style values based on application theme.
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (losers.length) {
@@ -45,12 +46,12 @@ export default WinnerModal = ({ losers, show, bet }) => {
             }}>
             <ImageBackground source={theme.backgroundImage} style={styles.imageBackground}>
                 <View style={{ flex: 1 }}>
-                    <Text style={[styles.headerText, { color: theme.color }]}>{I18n.t('winnerText')}</Text>
+                    <Text style={[styles.headerText, { color: theme.color }]}>{t('winnerText')}</Text>
                     <View style={{ alignItems: 'center' }}>
-                        <Text style={[styles.loserSelectText, { color: theme.color }]}>{I18n.t('loserSelectMessage')}</Text>
+                        <Text style={[styles.loserSelectText, { color: theme.color }]}>{t('loserSelectMessage')}</Text>
                     </View>
                 </View>
-                <Text style={[styles.totalSipsText, { color: theme.color }]}>{I18n.t('totalSipsText')} {reward}</Text>
+                <Text style={[styles.totalSipsText, { color: theme.color }]}>{t('totalSipsText')} {reward}</Text>
                 <View style={{ flex: 3 }}>
                     <FlatList
                         data={loserList}
@@ -62,7 +63,7 @@ export default WinnerModal = ({ losers, show, bet }) => {
                 <View style={{ flex: 1 }}>
                     <View style={[styles.buttonMercy, { backgroundColor: theme.backgroundColor }]}>
                         <TouchableOpacity onPress={() => setShowModal(false)}>
-                            <Text style={[styles.textClose, { color: theme.color }]}>{I18n.t('showMercyText')}</Text>
+                            <Text style={[styles.textClose, { color: theme.color }]}>{t('showMercyText')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

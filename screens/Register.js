@@ -5,7 +5,7 @@ import { useWebSocket } from '../WebsocketContext';
 import { useTheme } from '../ThemeContext';
 import Bcrypt from 'react-native-bcrypt';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import I18n from 'react-native-i18n';
+import { useTranslation } from 'react-i18next';
 
 export default Register = ({ navigation }) => {
 
@@ -20,6 +20,7 @@ export default Register = ({ navigation }) => {
 
     const { socket } = useWebSocket();
     const { theme } = useTheme();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (socket) {
@@ -66,17 +67,17 @@ export default Register = ({ navigation }) => {
             <View style={{ flex: 1 }}>
                 <ImageBackground source={theme.backgroundImage} style={{ height: '100%' }}>
                     <View style={styles.maxScroll}>
-                        <Text style={[styles.registerText, { color: theme.color }]}>{I18n.t('registerText')}</Text>
+                        <Text style={[styles.registerText, { color: theme.color }]}>{t('registerText')}</Text>
                         <View>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ color: theme.color }}>{I18n.t('iEmail')}</Text>
-                                {!emailError ? <Text style={{ color: 'red' }}>{I18n.t('registerWarningEmail')}</Text> : null}
+                                <Text style={{ color: theme.color }}>{t('iEmail')}</Text>
+                                {!emailError ? <Text style={{ color: 'red' }}>{t('registerWarningEmail')}</Text> : null}
                             </View>
                             <TextInput
                                 style={styles.input}
                                 onChangeText={setEmail}
                                 value={email}
-                                placeholder={I18n.t('ipEmail')}
+                                placeholder={t('ipEmail')}
                                 onEndEditing={() => setEmailError(isValidEmail())}
                                 autoFocus={true}
                                 keyboardType="email-address"
@@ -84,38 +85,38 @@ export default Register = ({ navigation }) => {
                         </View>
                         <View>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ color: theme.color }}>{I18n.t('iUsername')}</Text>
-                                {usernameError ? <Text style={{ color: 'red' }}>{I18n.t('registerWarningUsername')}</Text> : null}
+                                <Text style={{ color: theme.color }}>{t('iUsername')}</Text>
+                                {usernameError ? <Text style={{ color: 'red' }}>{t('registerWarningUsername')}</Text> : null}
                             </View>
                             <TextInput
                                 style={styles.input}
                                 onChangeText={setUsername}
                                 value={username}
-                                placeholder={I18n.t('ipUsername')}
+                                placeholder={t('ipUsername')}
                                 onEndEditing={() => setUsernameError(username.length <= 0)}
                             />
                         </View>
                         <View>
-                            <Text style={{ color: theme.color }}>{I18n.t('iPassword')}</Text>
+                            <Text style={{ color: theme.color }}>{t('iPassword')}</Text>
                             <TextInput
                                 style={styles.input}
                                 onChangeText={setPassword}
                                 value={password}
-                                placeholder={I18n.t('ipPassword')}
+                                placeholder={t('ipPassword')}
                                 secureTextEntry={true}
                             />
                             <PasswordStrengthMeterBar password={password} />
                         </View>
                         <View>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ color: theme.color }}>{I18n.t('rePasswordLabel')}</Text>
-                                {passwordError ? <Text style={{ color: 'red' }}>{I18n.t('passwordMatchError')}</Text> : null}
+                                <Text style={{ color: theme.color }}>{t('rePasswordLabel')}</Text>
+                                {passwordError ? <Text style={{ color: 'red' }}>{t('passwordMatchError')}</Text> : null}
                             </View>
                             <TextInput
                                 style={styles.input}
                                 onChangeText={setPassword1}
                                 value={password1}
-                                placeholder={I18n.t('ipRePassword')}
+                                placeholder={t('ipRePassword')}
                                 secureTextEntry={true}
                                 onEndEditing={() => setPasswordError(password1 != password)}
                             />
@@ -144,7 +145,7 @@ export default Register = ({ navigation }) => {
                             });
                         }}
                         style={[styles.buttonLogin, { backgroundColor: !canRegister() ? "gray" : theme.backgroundColor }]}>
-                        <Text style={[styles.buttonText, { color: theme.color }]}>{I18n.t('registerText')}</Text>
+                        <Text style={[styles.buttonText, { color: theme.color }]}>{t('registerText')}</Text>
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
             </View>

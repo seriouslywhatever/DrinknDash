@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Image, ImageBackground, StyleSheet, RefreshControl, SafeAreaView, ScrollView } from 'react-native';
 import { useWebSocket } from '../WebsocketContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import I18n from 'react-native-i18n';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../ThemeContext';
 
 export default Home = ({ navigation }) => {
@@ -13,6 +13,7 @@ export default Home = ({ navigation }) => {
     const [lobbyId, setLobbyId] = useState();
 
     const { theme } = useTheme(); //Provider of style values based on application theme.
+    const { t } = useTranslation();
     const [refreshing, setRefreshing] = useState(false);
 
     //Refresh list of lobbies on pull down. 
@@ -85,7 +86,7 @@ export default Home = ({ navigation }) => {
                 <View>
                     <Text style={[styles.playerCountText, { color: theme.color }]}>{item.totalplayer}</Text>
                 </View>
-                <Text style={{ color: theme.color }}>{I18n.t('playersText')}</Text>
+                <Text style={{ color: theme.color }}>{t('playersText')}</Text>
             </View>
         </TouchableOpacity>
     ), []);
@@ -114,9 +115,9 @@ export default Home = ({ navigation }) => {
                                 }
                             }}
                             style={styles.logoutButton}>
-                            <Text style={{ color: theme.color }}>{I18n.t('logoutText')}</Text>
+                            <Text style={{ color: theme.color }}>{t('logoutText')}</Text>
                         </TouchableOpacity>
-                        <Text style={[styles.headerText, { color: theme.color }]}>{I18n.t('lobbiesText')}</Text>
+                        <Text style={[styles.headerText, { color: theme.color }]}>{t('lobbiesText')}</Text>
                         <Text style={{ color: theme.color }}>{username}</Text>
                     </ImageBackground>
                 </View>
@@ -139,7 +140,7 @@ export default Home = ({ navigation }) => {
                             }
                         }}
                         style={[styles.button, { backgroundColor: theme.backgroundColor }]}>
-                        <Text style={[styles.buttonText, { color: theme.color }]}>{I18n.t('createLobbyText')}</Text>
+                        <Text style={[styles.buttonText, { color: theme.color }]}>{t('createLobbyText')}</Text>
                     </TouchableOpacity>
                 </View >
             </View>

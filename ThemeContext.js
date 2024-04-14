@@ -18,7 +18,7 @@ export const ThemeProvider = ({ children }) => {
         backgroundColor: '#EDEADE', //light
     }
 
-    
+
     //Values for Dark mode of the application
     const darkTheme = {
         backgroundImage: require('./assets/wood_dark.jpg'),
@@ -32,6 +32,7 @@ export const ThemeProvider = ({ children }) => {
 
     //Method to change the theme of the application.
     const changeTheme = (value) => {
+        console.log(value);
         setTheme(value ? lightTheme : darkTheme);
     };
 
@@ -39,7 +40,7 @@ export const ThemeProvider = ({ children }) => {
         const checkForPreference = async () => {
             const savedTheme = await AsyncStorage.getItem('theme');
             if (savedTheme) {
-                changeTheme(!JSON.parse(savedTheme));
+                changeTheme(JSON.parse(savedTheme));
             }
         }
         checkForPreference();

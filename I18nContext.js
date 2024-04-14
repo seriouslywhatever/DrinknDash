@@ -1,11 +1,24 @@
+import 'intl-pluralrules';
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import I18n from 'react-native-i18n';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
 import en from './translations/en.json';
 import nl from './translations/nl.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-I18n.fallbacks = true;
-I18n.translations = { en, nl };
+i18n
+    .use(initReactI18next) // passes i18n down to react-i18next
+    .init({
+        resources: {
+            en: { translation: en },
+            nl: { translation: nl }
+        },
+        lng: 'en', // default language
+        fallbackLng: 'en', // fallback language
+        interpolation: {
+            escapeValue: false // react already safes from xss
+        }
+    });
 
 const I18nContext = createContext();
 
@@ -20,23 +33,19 @@ export const I18nProvider = ({ children }) => {
         const checkForPreference = async () => {
             const language = await AsyncStorage.getItem('locale');
             if (language) {
-                I18n.locale = language;
-            } else {
-                I18n.locale = 'en';
+                i18n.changeLanguage(language);
             }
         }
         checkForPreference();
     }, []);
 
-    const [locale, setLocale] = useState(I18n.locale);
+    const [locale, setLocale] = useState(i18n.language);
 
     //Changes the language of the application. 
     const changeLanguage = (newLocale) => {
         if (newLocale) {
-            I18n.locale = newLocale;
+            i18n.changeLanguage(newLocale);
             setLocale(newLocale);
-        } else {
-            I18n.locale = locale;
         }
     };
 
