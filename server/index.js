@@ -41,7 +41,7 @@ const portsInUse = [];
 
 
 wss.on("connection", function connection(ws) {
-
+z
     ws.on("message", function incoming(message, isBinary) {
 
         if (message.toString().startsWith("LOGIN")) { //Handle user login.
@@ -86,7 +86,7 @@ wss.on("connection", function connection(ws) {
             });
         } else if (message.toString().startsWith("REGISTER")) { //Handle registration of new account."
             const userData = JSON.parse(message.toString().split(" ")[1]); //Contains the email, username and hashed password
-            const lookupUserQuery = `SELECT FROM users WHERE email = $1 OR username = $2;`;
+            const lookupUserQuery = `SELECT * FROM users WHERE email = $1 OR username = $2;`;
             const insertUserQuery = `INSERT INTO users (email, username, password, wins) VALUES ($1, $2, $3, 0) RETURNING id;`;
 
             pool.query(lookupUserQuery, [userData.email.toUpperCase(), userData.username.toUpperCase()], (error, result) => {
