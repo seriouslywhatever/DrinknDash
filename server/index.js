@@ -41,7 +41,6 @@ const portsInUse = [];
 
 
 wss.on("connection", function connection(ws) {
-z
     ws.on("message", function incoming(message, isBinary) {
 
         if (message.toString().startsWith("LOGIN")) { //Handle user login.
