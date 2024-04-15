@@ -3,7 +3,11 @@
 
 ## Description
 DrinknDash is a React Native application based on a drinking card game where users bet against their friends to see which "Horse" will cross the finish line first. 
-Create a lobby, send invitation to friends, place bets, talk in game and enjoy the game.
+Create a lobby, send invitation to friends, place bets, send messages and enjoy the game.
+
+## Rules
+Prior to the start of the game, the players  inside a game lobby can select to place a bet on one of four racehorses, represented by the 4 suits in a standard playing deck of cards. Players can select their desired bet amount, ranging from 1 to 6 and upon winning they receive double their bet amount to hand out to another player in the lobby. The game plays itself out without any influence from the players; their sole responsibility is to enjoy the race and wait for the results. 
+The core mechanic of the game is the drawing of cards from a randomized deck of playing cards. Each horse is assigned a card suit and if that suit is drawn, they move closer towards the end. Throughout the game, after every horse has passed a segment of the racetrack, a ‘punishment’ card will be drawn moving the corresponding horse back a position. The game ends whenever the first horse crosses the finish line. Players return to the lobby, where winners can distribute their winnings to others. The players are then to play again. 
 
 ## Installation Guide
 Perquisite 
