@@ -1,0 +1,63 @@
+{
+    "iEmail": "E-mail: ",
+    "ipEmail": "E-Email...",
+    "loginText": "Log in",
+    "iUsername": "Gebruikersnaam:",
+    "ipUsername": "Vul je gebruikersnaam...",
+    "iPassword": "Wachtwoord:",
+    "ipPassword": "Vul je wachtwoord...",
+    "forgotPasswordText": "Wachtwoord vergeten?",
+    "noAccountText": "Geen account?",
+    "signUpText": "Aanmelden",
+
+    "registerText":"Aanmelden",
+    "registerWarningEmail": "Geef een juiste e-mailadres",
+    "registerWarningUsername": "Geef een gebruikersnaam op",
+
+    "logoutText" : "Log uit",
+    "createLobbyText": "Maak lobby",
+    "lobbiesText": "spellobby's",
+    "playersText": "Spelers",
+
+    "pickHorseText": "Kies je paard",
+    "inviteText": "Uitnodigen",
+    "inviteMessage": "Kom een rondje DrinknDash met mij spelen!",
+    "startText": "Begin",
+
+    "getAccountBackText": "Terug toegang krijgen tot uw account",
+    "recoverEmailLabel": "Herstel e-mailadres:",
+    "recoverAccountText": "Herstel Account",
+
+    "dialogButtonCancel": "Annuleren",
+    "dialogButtonConfirm": "Bevestigen",
+
+    "changePasswordText": "Wachtwoord veranderen",
+    "changePasswordWarning":"Weet u zeker dat u uw wachtwoord wilt wijzigen?",
+
+    "passwordCorrect":  "Wachtwoord is bijgewerkt",
+    "passwordIncorrect":"Onjuist wachtwoord opgegeven",
+    "passwordMatchError": "Wachtwoorden komen niet overeen.",
+    "currentPasswordLabel":"Huidig wachtwoord: ",
+    "ipCurrentPassword": "Vul huiding wachtwoord in...",
+    "newPasswordLabel":"Nieuwe wachtwoord:",
+    "ipNewPassword":"Voer nieuw wachtwoord in...",
+    "rePasswordLabel": "Geef het wachtwoord opnieuw in:",
+    "ipRePassword": "Voer nieuw wachtwoord opnieuw in...",
+
+    "sipsSelectionText": "Selecteer aantal slokjes",
+
+    "winnerText": "winnaar",
+    "loserSelectMessage": "Selecteer de gebruiker om slokjes te sturen",
+    "totalSipsText":"Totale slokjes:",
+    "showMercyText": "Lief zijn",
+
+    "settingsText": "Instellingen",
+    "darkModeText": "donker thema",
+    "pushNotificationText": "Pushmeldingen",
+    "languagesText": "taal",
+    "deleteAccountText": "Account verwijderen",
+    "deleteAccountWarning" : "Weet u zeker dat u uw account wilt verwijderen?",
+
+    "dutchLabel":"Nederlands",
+    "englishLabel": "Engels"
+}

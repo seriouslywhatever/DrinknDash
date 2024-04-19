@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "DrinknDash",
+    "slug": "DrinknDash",
+    "extra": {
+      "eas": {
+        "projectId": "0595a76b-5988-4e9e-9d3a-469bcd2b037d"
+      }
+    },
+    "owner": "sersiouslywhatevr",
+    "android": {
+      "package": "com.sersiouslywhatevr.DrinknDash"
+    }
+  }
+}

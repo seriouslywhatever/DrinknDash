@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Horse renders correctly 1`] = `
+<View
+  animatedStyle={
+    {
+      "value": {
+        "transform": [
+          {
+            "translateX": 200,
+          },
+        ],
+      },
+    }
+  }
+  collapsable={false}
+  style={
+    {
+      "height": 50,
+      "transform": [
+        {
+          "translateX": 200,
+        },
+      ],
+      "width": 50,
+    }
+  }
+>
+  <Image
+    animatedStyle={
+      {
+        "value": {},
+      }
+    }
+    collapsable={false}
+    source={1}
+    style={
+      {
+        "height": 50,
+        "resizeMode": "contain",
+        "width": 50,
+      }
+    }
+  />
+</View>
+`;
+
+exports[`Horse renders correctly with given props 1`] = `
+<View
+  animatedStyle={
+    {
+      "value": {
+        "transform": [
+          {
+            "translateX": 200,
+          },
+        ],
+      },
+    }
+  }
+  collapsable={false}
+  style={
+    {
+      "height": 50,
+      "transform": [
+        {
+          "translateX": 200,
+        },
+      ],
+      "width": 50,
+    }
+  }
+>
+  <Image
+    animatedStyle={
+      {
+        "value": {},
+      }
+    }
+    collapsable={false}
+    source={1}
+    style={
+      {
+        "height": 50,
+        "resizeMode": "contain",
+        "width": 50,
+      }
+    }
+  />
+</View>
+`;
