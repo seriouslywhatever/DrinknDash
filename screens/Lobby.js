@@ -87,7 +87,7 @@ export default Lobby = ({ navigation, route }) => {
                 } else if (server_message[0] == "HOST") {
                     setIsHost(true);
                 } else if (server_message[0] == "GAME") {
-                    navigation.navigate("Main", { port: parseInt(server_message[1]) });
+                    navigation.navigate("Main");
                 } else if (server_message[0] == "CANCEL") {
                     navigation.replace("Home");
                 } else if (server_message[0] == "LOSER") {

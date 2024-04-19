@@ -5,6 +5,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import { useTheme } from '../ThemeContext';
 import Horse from '../components/Horse';
 import ResultModal from '../components/ResultModal';
+import { useWebSocket } from '../WebsocketContext';
 
 /**
  * Images sources for cards.
@@ -72,6 +73,7 @@ export default Main = ({ navigation, route }) => {
 
     //Provider of style values based on application theme.
     const { theme } = useTheme();
+    const { socket } = useWebSocket();
 
     /**
      * Variable For tracking purposes.
@@ -145,181 +147,167 @@ export default Main = ({ navigation, route }) => {
         //Game should be played in Lanscape mode.
         setScreenOrientation();
 
-        /**
-         * Every game is assigned a random port. route.params.port
-         * ws://192.168.2.2 IPv4 Address.
-         */
-        const ws = new WebSocket(`ws://192.168.2.2:${route.params.port}`);
+        if (socket) {
+            socket.send("DRAW");
+            socket.onmessage = (event) => {
+                var server_message = event.data.split(' ');
+                switch (server_message[0]) {
+                    //Receive card from the server and move corresponding Horse object.
+                    case 'DRAW':
+                        setDrawnCard(CARD_IMAGES[server_message[1]]);
+                        switch (parseInt(server_message[2])) {
+                            case 1:
+                                diamondDistance.value += HOLDER;
+                                diamondPlace++;
+                                placesVisited[diamondPlace] += 1;
+                                break;
+                            case 2:
+                                spadeDistance.value += HOLDER;
+                                spadePlace++;
+                                placesVisited[spadePlace] += 1;
+                                break;
+                            case 3:
+                                heartDistance.value += HOLDER;
+                                heartPlace++;
+                                placesVisited[heartPlace] += 1;
+                                break;
+                            case 4:
+                                clubDistance.value += HOLDER;
+                                clubPlace++;
+                                placesVisited[clubPlace] += 1;
+                                break;
+                            default: console.log(server_message[2]);
+                                break;
+                        }
 
-        //Game is automatically started when the screen is navigated to. 
-        ws.onopen = () => {
-            console.log('Game connection opened');
-            ws.send("DRAW");
-        };
-
-        ws.onmessage = (event) => {
-            var server_message = event.data.split(' ');
-            switch (server_message[0]) {
-                //Receive card from the server and move corresponding Horse object.
-                case 'DRAW':
-                    setDrawnCard(CARD_IMAGES[server_message[1]]);
-                    switch (parseInt(server_message[2])) {
-                        case 1:
-                            diamondDistance.value += HOLDER;
-                            diamondPlace++;
-                            placesVisited[diamondPlace] += 1;
-                            break;
-                        case 2:
-                            spadeDistance.value += HOLDER;
-                            spadePlace++;
-                            placesVisited[spadePlace] += 1;
-                            break;
-                        case 3:
-                            heartDistance.value += HOLDER;
-                            heartPlace++;
-                            placesVisited[heartPlace] += 1;
-                            break;
-                        case 4:
-                            clubDistance.value += HOLDER;
-                            clubPlace++;
-                            placesVisited[clubPlace] += 1;
-                            break;
-                        default: console.log(server_message[2]);
-                            break;
-                    }
-
-                    if (placesVisited.includes(4)) {
-                        //If each horse object has crossed a certain threshold, a penalty card should be drawn.
-                        placesVisited.splice(placesVisited.indexOf(4), 1, 0);
-                        setTimeout(() => {
-                            ws.send("PENALTY");
-                        }, 1000);
-                    } else {
-                        //Game should end if an object has moved up 7 times. 
-                        if (placesVisited[7] < 1) {
+                        if (placesVisited.includes(4)) {
+                            //If each horse object has crossed a certain threshold, a penalty card should be drawn.
+                            placesVisited.splice(placesVisited.indexOf(4), 1, 0);
                             setTimeout(() => {
-                                ws.send("DRAW");
+                                socket.send("PENALTY");
                             }, 1000);
                         } else {
-                            const placements = [diamondPlace, spadePlace, heartPlace, clubPlace].sort();
+                            //Game should end if an object has moved up 7 times. 
+                            if (placesVisited[7] < 1) { 
+                                setTimeout(() => {
+                                    socket.send("DRAW");
+                                }, 1000);
+                            } else {
+                                const placements = [diamondPlace, spadePlace, heartPlace, clubPlace].sort();
 
-                            const raceResults = [
-                                {
-                                    id: 1,
-                                    place: (4 - placements.lastIndexOf(diamondPlace)),
-                                    suit: 0
-                                },
-                                {
-                                    id: 2,
-                                    place: (4 - placements.lastIndexOf(spadePlace)),
-                                    suit: 1
-                                },
-                                {
-                                    id: 3,
-                                    place: (4 - placements.lastIndexOf(heartPlace)),
-                                    suit: 2
-                                },
-                                {
-                                    id: 4,
-                                    place: (4 - placements.lastIndexOf(clubPlace)),
-                                    suit: 3
-                                },
-                            ];
+                                const raceResults = [
+                                    {
+                                        id: 1,
+                                        place: (4 - placements.lastIndexOf(diamondPlace)),
+                                        suit: 0
+                                    },
+                                    {
+                                        id: 2,
+                                        place: (4 - placements.lastIndexOf(spadePlace)),
+                                        suit: 1
+                                    },
+                                    {
+                                        id: 3,
+                                        place: (4 - placements.lastIndexOf(heartPlace)),
+                                        suit: 2
+                                    },
+                                    {
+                                        id: 4,
+                                        place: (4 - placements.lastIndexOf(clubPlace)),
+                                        suit: 3
+                                    },
+                                ];
 
-                            //Winning horse is moved to first index and server is notified to end the game. 
-                            raceResults.sort((a, b) => a.place - b.place);
-                            setResults(raceResults);
-                            ws.send(`END ${JSON.stringify(raceResults)}`);
+                                //Winning horse is moved to first index and server is notified to end the game. 
+                                raceResults.sort((a, b) => a.place - b.place);
+                                setResults(raceResults);
+                                socket.send(`END ${JSON.stringify(raceResults)}`);
 
-                            setTimeout(() => {
-                                setShowModal(true);
-                            }, 1000);
+                                setTimeout(() => {
+                                    setShowModal(true);
+                                }, 1000);
+                            }
                         }
-                    }
-                    break;
-                //Display penalty card at correct location
-                case 'PENALTY':
-                    penaltyDrawn++;
-                    switch (penaltyDrawn) {
-                        case 1:
-                            setPenaltyCard1(CARD_IMAGES[server_message[1]]);
-                            break;
-                        case 2:
-                            setPenaltyCard2(CARD_IMAGES[server_message[1]]);
-                            break;
-                        case 3:
-                            setPenaltyCard3(CARD_IMAGES[server_message[1]]);
-                            break;
-                        case 4:
-                            setPenaltyCard4(CARD_IMAGES[server_message[1]]);
-                            break;
-                        case 5:
-                            setPenaltyCard5(CARD_IMAGES[server_message[1]]);
-                            break;
-                        case 6:
-                            setPenaltyCard6(CARD_IMAGES[server_message[1]]);
-                            break;
-                        default:
-                            console.log(penaltyDrawn)
-                            break;
-                    }
-                    //Card drawn as punishment moves Horse object backwards.
-                    switch (parseInt(server_message[2])) {
-                        case 1:
-                            diamondDistance.value -= HOLDER;
-                            placesVisited[diamondPlace] -= 1;
-                            diamondPlace--;
-                            placesVisited[diamondPlace] += 1;
-                            break;
-                        case 2:
-                            spadeDistance.value -= HOLDER;
-                            placesVisited[spadePlace] -= 1;
-                            spadePlace--;
-                            placesVisited[spadePlace] += 1;
-                            break;
-                        case 3:
-                            heartDistance.value -= HOLDER;
-                            placesVisited[heartPlace] -= 1;
-                            heartPlace--;
-                            placesVisited[heartPlace] += 1;
-                            break;
-                        case 4:
-                            clubDistance.value -= HOLDER;
-                            placesVisited[clubPlace] -= 1;
-                            clubPlace--;
-                            placesVisited[clubPlace] += 1;
-                            break;
-                        default: console.log(server_message[2]);
-                            break;
-                    }
+                        break;
+                    //Display penalty card at correct location
+                    case 'PENALTY':
+                        penaltyDrawn++;
+                        switch (penaltyDrawn) {
+                            case 1:
+                                setPenaltyCard1(CARD_IMAGES[server_message[1]]);
+                                break;
+                            case 2:
+                                setPenaltyCard2(CARD_IMAGES[server_message[1]]);
+                                break;
+                            case 3:
+                                setPenaltyCard3(CARD_IMAGES[server_message[1]]);
+                                break;
+                            case 4:
+                                setPenaltyCard4(CARD_IMAGES[server_message[1]]);
+                                break;
+                            case 5:
+                                setPenaltyCard5(CARD_IMAGES[server_message[1]]);
+                                break;
+                            case 6:
+                                setPenaltyCard6(CARD_IMAGES[server_message[1]]);
+                                break;
+                            default:
+                                console.log(penaltyDrawn)
+                                break;
+                        }
+                        //Card drawn as punishment moves Horse object backwards.
+                        switch (parseInt(server_message[2])) {
+                            case 1:
+                                diamondDistance.value -= HOLDER;
+                                placesVisited[diamondPlace] -= 1;
+                                diamondPlace--;
+                                placesVisited[diamondPlace] += 1;
+                                break;
+                            case 2:
+                                spadeDistance.value -= HOLDER;
+                                placesVisited[spadePlace] -= 1;
+                                spadePlace--;
+                                placesVisited[spadePlace] += 1;
+                                break;
+                            case 3:
+                                heartDistance.value -= HOLDER;
+                                placesVisited[heartPlace] -= 1;
+                                heartPlace--;
+                                placesVisited[heartPlace] += 1;
+                                break;
+                            case 4:
+                                clubDistance.value -= HOLDER;
+                                placesVisited[clubPlace] -= 1;
+                                clubPlace--;
+                                placesVisited[clubPlace] += 1;
+                                break;
+                            default: console.log(server_message[2]);
+                                break;
+                        }
 
-                    setTimeout(() => {
-                        ws.send("DRAW");
-                    }, 1000);
+                        setTimeout(() => {
+                            socket.send("DRAW");
+                        }, 1000);
 
-                    break;
-                case 'ENDSCREEN':
-                    /**
-                     * Navigating user back to lobby after game ends.
-                     * Postgame: For conditional behaviour in lobby screen.
-                     * id: Retrieve users and bets in Lobby.
-                     * winner: to determine winners.
-                     * losers: to populate list of losers in Lobby.
-                     */
-                    navigation.navigate('Lobby', { postgame: true, id: server_message[1], winner: server_message[2], losers: server_message[3] });
-                    break;
-                default:
-                    console.log(server_message[0]);
-                    break;
+                        break;
+                    case 'ENDSCREEN':
+                        /**
+                         * Navigating user back to lobby after game ends.
+                         * Postgame: For conditional behaviour in lobby screen.
+                         * id: Retrieve users and bets in Lobby.
+                         * winner: to determine winners.
+                         * losers: to populate list of losers in Lobby.
+                         */
+                        navigation.navigate('Lobby', { postgame: true, id: server_message[1], winner: server_message[2], losers: server_message[3] });
+                        break;
+                    default:
+                        console.log(server_message[0]);
+                        break;
+                }
             }
         }
 
-        ws.onclose = () => {
-            console.log('Game connection closed!');
-        };
-
         return () => {
-            ws.close();
             unlockScreenOrientation();
         };
     }, []);
