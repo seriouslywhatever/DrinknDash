@@ -1,7 +1,6 @@
 import React from 'react';
 import Animated, { withTiming, useAnimatedStyle, Easing } from "react-native-reanimated";
-
-const jockey = require('../assets/jockey.gif');
+import LottieView from 'lottie-react-native';
 
 /**
  * Horse component to move in Game screen.
@@ -23,13 +22,13 @@ export default Horse = (props) => {
 
     return (
         <Animated.View style={[animatedStyles, { width: size, height: size }]}>
-            <Animated.Image
-                source={jockey}
+            <LottieView
+                autoPlay={true}
                 style={{
                     width: size,
                     height: size,
-                    resizeMode: 'contain',
                 }}
+                source={require('../assets/horse_jockey.json')}
             />
         </Animated.View>
     );
